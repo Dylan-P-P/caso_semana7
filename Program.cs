@@ -63,6 +63,116 @@ namespace caso_semana7
             
         }
 
+        static public void buscar_estudiante()
+        {
+            Console.WriteLine("*****Buscar Estudiante*****");
+            if (contador == 0)
+            {
+                Console.WriteLine("No hay datos por mostrar");
+                return;
+            }
+            Console.WriteLine("Ingresar nombre a buscar: ");
+            string nombre = Console.ReadLine();
+            bool encontrado = false;
+            for (int i = 0; i < contador; i++)
+            {
+                if (nombres[i].Equals(nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Estudiante encontrado: {nombres[i]} - Nota: {notas[i]}");
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado)
+            {
+                Console.WriteLine("Estudiante no encontrado");
+            }
+        }
+
+        static public void modificar_nota()
+        {
+            Console.WriteLine("*****Modificar Nota*****");
+            if (contador == 0)
+            {
+                Console.WriteLine("No hay datos por mostrar");
+                return;
+            }
+            Console.WriteLine("Ingresar nombre a buscar: ");
+            string nombre = Console.ReadLine();
+            bool encontrado = false;
+            for (int i = 0; i < contador; i++)
+            {
+                if (nombres[i].Equals(nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Estudiante encontrado: {nombres[i]} - Nota: {notas[i]}");
+                    double nuevaNota;
+                    while (true)
+                    {
+                        Console.WriteLine("Ingresar nueva nota: ");
+                        nuevaNota = double.Parse(Console.ReadLine());
+                        if (nuevaNota >= 0 && nuevaNota <= 20)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: La nota debe ser [0 - 20]");
+                        }
+                    }
+                    notas[i] = nuevaNota;
+                    Console.WriteLine($"Nota modificada: {nombres[i]} - Nueva Nota: {notas[i]}");
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado)
+            {
+                Console.WriteLine("Estudiante no encontrado");
+            }
+        }
+
+        static public void burbuja()
+        {
+            for (int i = 0; i < contador - 1; i++)
+            {
+                for (int j = 0; j < contador - i - 1; j++)
+                {
+                    if (notas[j] < notas[j + 1])
+                    {
+                        // Intercambiar notas
+                        double tempNota = notas[j];
+                        notas[j] = notas[j + 1];
+                        notas[j + 1] = tempNota;
+                        // Intercambiar nombres correspondientes
+                        string tempNombre = nombres[j];
+                        nombres[j] = nombres[j + 1];
+                        nombres[j + 1] = tempNombre;
+                    }
+                }
+            }
+        }
+
+        static public void mostrar_ordenado()
+        {
+            Console.WriteLine("*****Listado de Estudiantes Ordenado*****");
+            if (contador == 0)
+            {
+                Console.WriteLine("No hay datos por mostrar");
+                return;
+            }
+            // Crear una lista de tuplas para ordenar por nota
+            var estudiantes = new List<(string nombre, double nota)>();
+            for (int i = 0; i < contador; i++)
+            {
+                estudiantes.Add((nombres[i], notas[i]));
+            }
+            // Ordenar la lista por nota descendente
+            var estudiantesOrdenados = estudiantes.OrderByDescending(e => e.nota).ToList();
+            for (int i = 0; i < estudiantesOrdenados.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}.- {estudiantesOrdenados[i].nombre} - Nota: {estudiantesOrdenados[i].nota}");
+            }
+        }
         static void Main(string[] args)
         {
             Titulo();
@@ -76,7 +186,8 @@ namespace caso_semana7
                 Console.WriteLine("[4] Mostrar Lista sin Ordenar");
                 Console.WriteLine("[5] Mostrar reporte Ordenado");
                 Console.WriteLine("[6] Salir");
-                Console.Write("Ingresar opción");
+                Console.Write("Ingresar opción: ");
+                opc = int.Parse(Console.ReadLine());
                 if (opc < 1 || opc > 6)
                 {
                     Console.WriteLine("Error: opción fuera de rango [1-6]");
@@ -84,18 +195,18 @@ namespace caso_semana7
                 }
                 switch (opc)
                 {
-                    case 1: 
+                    case 1:
                         Registrar_estudiante(); break;
                     case 2:
-                        //buscar_estudiante();
+                        buscar_estudiante();
                         break;
                     case 3:
-                        //modificar_nota();
+                        modificar_nota();
                         break;
                     case 4:
                         mostrar(); break;
                     case 5:
-                        //mostrar_orden
+                        mostrar_ordenado();
                         break;
                     case 6:
                         Console.WriteLine("Gracias por usar el sistema");
